@@ -2,21 +2,37 @@ const request = require('request')
 const cheerio = require('cheerio')
 const fs = require('fs')
 
-function alexaStats (domain) {
+function scamvoidReport (domain) {
   return new Promise((resolve, reject) => {
-    request({
-      url: `https://www.scamvoid.com/check/${domain}`,
-      headers: {
-        Host: 'www.scamvoid.com',
-        Referer: `https://www.scamvoid.com/check/${domain}`,
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-        Pragma: 'no-cache',
-        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.8,es;q=0.6'
-      }
-    }, (error, response, body) => {
+    const headers = {
+      Host: 'www.scamvoid.com',
+      Referer: `https://www.scamvoid.com/check/${domain}`,
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+      Pragma: 'no-cache',
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.8,es;q=0.6'
+    }
+
+    // for GET
+    // const uri = `https://www.scamvoid.com/check/${domain}`
+
+    // for POST
+    const uri = 'https://www.scamvoid.com/'
+
+    const options = {
+      method: 'POST',
+      uri,
+      form: {
+        site: domain
+      },
+      followRedirect: true,
+      followAllRedirects: true,
+      headers
+    }
+
+    request(options, (error, response, body) => {
       if (error) {
         return reject(error)
       }
@@ -214,4 +230,4 @@ function getFlag(el) {
   return flag
 }
 
-module.exports = alexaStats
+module.exports = scamvoidReport
