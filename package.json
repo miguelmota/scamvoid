@@ -1,7 +1,7 @@
 {
   "name": "scamvoid",
   "version": "0.0.1",
-  "description": "",
+  "description": "Scrapes Scamvoid site to get safety report for domain.",
   "main": "index.js",
   "scripts": {
     "test": "node test/*"
