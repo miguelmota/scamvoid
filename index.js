@@ -69,16 +69,17 @@ function alexaStats (domain) {
 
       const $ = cheerio.load(body)
 
-      let key = $('body > section > div > div.panel.panel-success.m-t-3 > div.panel-heading').text().trim()
-      let value = $('body > section > div > div.panel.panel-success.m-t-3 > div.panel-body > h2')
-      let flag = getFlag(value)
+      let key = $('body > section > div > div.panel.m-t-3')
+      let value = $('body > section > div > div.panel.m-t-3 > div.panel-body > h2')
+      let flag = getFlag(key)
+      key = key.find('> div.panel-heading').text().trim()
       value = value.text().trim()
 
       data.verdict.key = key
       data.verdict.value = value
       data.verdict.flag = flag
 
-      let tableRows = $('body > section > div > div.panel.panel-success.m-t-3 > div.panel-body > div > table > tbody > tr')
+      let tableRows = $('body > section > div > div.panel.m-t-3 > div.panel-body > div > table > tbody > tr')
 
       tableRows.each((i, x) => {
         const key = $(x).find('td:nth-child(1)').text().trim()
@@ -100,18 +101,22 @@ function alexaStats (domain) {
       flag = getFlag(value)
       value = value.text().trim()
 
-      data.wot.key = key
-      data.wot.value = value
-      data.wot.flag = flag
+      if (/wot/gi.test(key)) {
+        data.wot.key = key
+        data.wot.value = value
+        data.wot.flag = flag
+      }
 
       key = $('body > section > div > div:nth-child(8) > div > h3').text().trim()
       value = $('body > section > div > div:nth-child(8) > div > p.font-bold')
       flag = getFlag(value)
       value = value.text().trim()
 
-      data.blacklist.key = key
-      data.blacklist.value = value
-      data.blacklist.flag = flag
+      if (/blacklist/gi.test(key)) {
+        data.blacklist.key = key
+        data.blacklist.value = value
+        data.blacklist.flag = flag
+      }
 
       tableRows = $('body > section > div > div:nth-child(8) > div > div > table > tbody > tr')
 
@@ -135,31 +140,39 @@ function alexaStats (domain) {
       flag = getFlag(value)
       value = value.text().trim()
 
-      data.popularity.key = key
-      data.popularity.value = value
-      data.popularity.flag = flag
+      if (/popularity/gi.test(key)) {
+        data.popularity.key = key
+        data.popularity.value = value
+        data.popularity.flag = flag
+      }
 
       key = $('body > section > div > div:nth-child(11) > div > h3').text().trim()
       value = $('body > section > div > div:nth-child(11) > div > p.font-bold')
       flag = getFlag(value)
       value = value.text().trim()
 
-      data.creation.key = key
-      data.creation.value = value
-      data.creation.flag = flag
+      if (/creation/gi.test(key)) {
+        data.creation.key = key
+        data.creation.value = value
+        data.creation.flag = flag
+      }
 
       key = $('body > section > div > div:nth-child(13) > div > h3').text().trim()
       value = $('body > section > div > div:nth-child(13) > div > p.font-bold')
       flag = getFlag(value)
       value = value.text().trim()
 
-      data.https.key = key
-      data.https.value = value
-      data.https.flag = flag
+      if (/https/gi.test(key)) {
+        data.https.key = key
+        data.https.value = value
+        data.https.flag = flag
+      }
 
       key = $('body > section > div > div:nth-child(14) > div > h3').text().trim()
 
-      data.hostingProvider.key = key
+      if (/hosting/gi.test(key)) {
+        data.hostingProvider.key = key
+      }
 
       tableRows = $('body > section > div > div:nth-child(14) > div > div > table > tbody > tr')
 
@@ -186,13 +199,13 @@ function getFlag(el) {
     return flag
   }
 
-  if (el.hasClass('text-success') || el.hasClass('label-success')) {
+  if (el.hasClass('text-success') || el.hasClass('label-success') || el.hasClass('panel-success')) {
     flag = 'safe'
-  } else if (el.hasClass('text-danger') || el.hasClass('label-danger')) {
-    flag = 'safe'
-  } else if (el.hasClass('text-warning') || el.hasClass('label-warning')) {
+  } else if (el.hasClass('text-danger') || el.hasClass('label-danger') || el.hasClass('panel-danger')) {
+    flag = 'unsafe'
+  } else if (el.hasClass('text-warning') || el.hasClass('label-warning') || el.hasClass('panel-warning')) {
     flag = 'warning'
-  } else if (el.hasClass('text-default') || el.hasClass('label-default')) {
+  } else if (el.hasClass('text-default') || el.hasClass('label-default') || el.hasClass('panel-default')) {
     flag = 'unknown'
   }
 
