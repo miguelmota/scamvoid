@@ -32,7 +32,8 @@ function alexaStats (domain) {
         wot: {
           flag: '',
           key: '',
-          value: ''
+          value: '',
+          link: ''
         },
         blacklist: {
           flag: '',
@@ -105,6 +106,7 @@ function alexaStats (domain) {
         data.wot.key = key
         data.wot.value = value
         data.wot.flag = flag
+        data.wot.link = `https://www.mywot.com/en/scorecard/${domain}`
       }
 
       key = $('body > section > div > div:nth-child(8) > div > h3').text().trim()
