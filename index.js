@@ -139,17 +139,22 @@ function scamvoidReport (domain) {
       tableRows = $('body > section > div > div:nth-child(8) > div > div > table > tbody > tr')
 
       tableRows.each((i, x) => {
-        const key = $(x).find('td:nth-child(1)').text().trim()
+        let key = $(x).find('td:nth-child(1)')
         let value = $(x).find('td:nth-child(2) span')
         let link = $(x).find('td:nth-child(3) a').attr('href')
         const flag = getFlag(value)
+        const image = key.find('img').attr('src')
+
+        key = key.text().trim()
         value = value.text().trim()
+
 
         data.blacklist.report.push({
           key,
           value,
           flag,
-          link
+          link,
+          image
         })
       })
 
